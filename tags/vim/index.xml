@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Vim on 我的个人博客</title><link>https://zhong2024905488.github.io/my-blog/tags/vim/</link><description>Recent content in Vim on 我的个人博客</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Sun, 18 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://zhong2024905488.github.io/my-blog/tags/vim/index.xml" rel="self" type="application/rss+xml"/><item><title>实验二：Linux 文件管理及文件过滤实践</title><link>https://zhong2024905488.github.io/my-blog/posts/experiment-2/</link><pubDate>Sun, 18 Oct 2026 00:00:00 +0000</pubDate><guid>https://zhong2024905488.github.io/my-blog/posts/experiment-2/</guid><description>&lt;h2 id="实验目的"&gt;实验目的&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;掌握文件管理操作（创建、复制、移动、删除、链接）；&lt;/li&gt;
+&lt;li&gt;掌握 Vim 编辑器的基本使用（进入、编辑、保存、查找、替换）；&lt;/li&gt;
+&lt;li&gt;掌握 grep、sed、awk 三种文本过滤工具的基本用法；&lt;/li&gt;
+&lt;li&gt;理解正则表达式与管道，并能组合使用这些工具完成检索、过滤与统计。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="实验环境"&gt;实验环境&lt;/h2&gt;
+&lt;p&gt;Ubuntu 20.04，Vim 8.x，GNU grep / sed / awk。&lt;/p&gt;
+&lt;h2 id="实验内容与步骤"&gt;实验内容与步骤&lt;/h2&gt;
+&lt;h3 id="一文件管理操作"&gt;一、文件管理操作&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;mkdir -p ~/lab2/demo
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;touch ~/lab2/demo/file1.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;cp ~/lab2/demo/file1.txt ~/lab2/demo/file2.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;mv ~/lab2/demo/file2.txt ~/lab2/demo/file2.bak
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;rm -i ~/lab2/demo/file2.bak
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;硬链接与软链接对比&lt;/strong&gt;：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;ln ~/lab2/demo/file1.txt ~/lab2/demo/hard.txt &lt;span style="color:#75715e"&gt;# 硬链接&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;ln -s ~/lab2/demo/file1.txt ~/lab2/demo/soft.txt &lt;span style="color:#75715e"&gt;# 软链接（符号链接）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;ls -li ~/lab2/demo
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;执行后可以看到：&lt;code&gt;hard.txt&lt;/code&gt; 与 &lt;code&gt;file1.txt&lt;/code&gt; 的 inode 号相同、链接计数为 2；&lt;code&gt;soft.txt&lt;/code&gt; 是独立 inode，内容指向源文件路径。删除源文件后，硬链接仍可访问，软链接则失效（出现红色闪烁的断链）。&lt;/p&gt;
+&lt;p&gt;&lt;img alt="图 1 硬链接与软链接的 inode 对比" loading="lazy" src="https://zhong2024905488.github.io/my-blog/images/exp2-ln.png"&gt;&lt;/p&gt;
+&lt;h3 id="二vim-编辑器练习"&gt;二、Vim 编辑器练习&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;vim ~/lab2/demo/note.txt
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在 Vim 中依次练习：按 &lt;code&gt;i&lt;/code&gt; 进入插入模式输入内容，按 &lt;code&gt;Esc&lt;/code&gt; 回到普通模式，&lt;code&gt;:wq&lt;/code&gt; 保存退出；用 &lt;code&gt;/关键字&lt;/code&gt; 查找、&lt;code&gt;:%s/旧/新/g&lt;/code&gt; 全文替换、&lt;code&gt;dd&lt;/code&gt; 删除整行、&lt;code&gt;yy&lt;/code&gt; 复制整行、&lt;code&gt;p&lt;/code&gt; 粘贴、&lt;code&gt;u&lt;/code&gt; 撤销。&lt;/p&gt;</description></item></channel></rss>

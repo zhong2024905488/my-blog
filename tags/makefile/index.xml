@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Makefile on 我的个人博客</title><link>https://zhong2024905488.github.io/my-blog/tags/makefile/</link><description>Recent content in Makefile on 我的个人博客</description><generator>Hugo</generator><language>zh-cn</language><lastBuildDate>Sun, 08 Nov 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://zhong2024905488.github.io/my-blog/tags/makefile/index.xml" rel="self" type="application/rss+xml"/><item><title>实验三：Linux Shell 编程及 Makefile 实践</title><link>https://zhong2024905488.github.io/my-blog/posts/experiment-3/</link><pubDate>Sun, 08 Nov 2026 00:00:00 +0000</pubDate><guid>https://zhong2024905488.github.io/my-blog/posts/experiment-3/</guid><description>&lt;h2 id="实验目的"&gt;实验目的&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;掌握用 Vim 编写 Bash 脚本的完整流程（新建、编辑、赋权、运行）；&lt;/li&gt;
+&lt;li&gt;理解并运用 if/elif/else 条件判断与 case 分支；&lt;/li&gt;
+&lt;li&gt;掌握 read 读取输入、date 生成时间戳、文件与目录操作等语法；&lt;/li&gt;
+&lt;li&gt;学会把运行信息同时输出到屏幕和带日期的日志文件；&lt;/li&gt;
+&lt;li&gt;掌握 for 循环遍历命令行参数，以及用 bash -x 调试脚本；&lt;/li&gt;
+&lt;li&gt;掌握 Makefile 的目标、依赖与伪目标，实现 C 程序的自动化编译。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="实验环境"&gt;实验环境&lt;/h2&gt;
+&lt;p&gt;Ubuntu 20.04，GNU bash 5.x，gcc 9.x，GNU make 4.x。&lt;/p&gt;
+&lt;h2 id="实验内容与步骤"&gt;实验内容与步骤&lt;/h2&gt;
+&lt;h3 id="一脚本-1age_roomsh年龄分房"&gt;一、脚本 1：age_room.sh（年龄分房）&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;#!/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;read -p &lt;span style="color:#e6db74"&gt;&amp;#34;Input your age! &amp;#34;&lt;/span&gt; age
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt; &lt;span style="color:#f92672"&gt;[&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;$age&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt; -ge &lt;span style="color:#ae81ff"&gt;60&lt;/span&gt; &lt;span style="color:#f92672"&gt;]&lt;/span&gt;; &lt;span style="color:#66d9ef"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; echo &lt;span style="color:#e6db74"&gt;&amp;#34;Please go to room 501!&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;elif&lt;/span&gt; &lt;span style="color:#f92672"&gt;[&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;$age&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt; -ge &lt;span style="color:#ae81ff"&gt;50&lt;/span&gt; &lt;span style="color:#f92672"&gt;]&lt;/span&gt;; &lt;span style="color:#66d9ef"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; echo &lt;span style="color:#e6db74"&gt;&amp;#34;Please go to room 401!&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;elif&lt;/span&gt; &lt;span style="color:#f92672"&gt;[&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;$age&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt; -ge &lt;span style="color:#ae81ff"&gt;40&lt;/span&gt; &lt;span style="color:#f92672"&gt;]&lt;/span&gt;; &lt;span style="color:#66d9ef"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; echo &lt;span style="color:#e6db74"&gt;&amp;#34;Please go to room 301!&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;elif&lt;/span&gt; &lt;span style="color:#f92672"&gt;[&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;$age&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt; -ge &lt;span style="color:#ae81ff"&gt;30&lt;/span&gt; &lt;span style="color:#f92672"&gt;]&lt;/span&gt;; &lt;span style="color:#66d9ef"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; echo &lt;span style="color:#e6db74"&gt;&amp;#34;Please go to room 201!&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;elif&lt;/span&gt; &lt;span style="color:#f92672"&gt;[&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;$age&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt; -ge &lt;span style="color:#ae81ff"&gt;20&lt;/span&gt; &lt;span style="color:#f92672"&gt;]&lt;/span&gt;; &lt;span style="color:#66d9ef"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; echo &lt;span style="color:#e6db74"&gt;&amp;#34;Please go to room 101!&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;else&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; echo &lt;span style="color:#e6db74"&gt;&amp;#34;Please wait at the door!&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;赋予执行权限并运行：&lt;/p&gt;</description></item></channel></rss>
